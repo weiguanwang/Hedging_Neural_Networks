@@ -1,7 +1,5 @@
 # README	
 
-
-
 ## Contact and suggested citation
 
 Author:
