@@ -1,16 +1,19 @@
 # README	
 
-[toc]
 
-## Contact and citation
 
-Weiguan Wang [w.wang34@lse.ac.uk]()
+## Contact and suggested citation
 
-Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
+Author:
+
+- Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
+- Weiguan Wang [w.wang34@lse.ac.uk]()
+
+Address: 
 
 Department of Mathematics, London School of Economics and Political Science, London, United Kingdom
 
-14 April 2020
+Date: 14 April 2020
 
 
 
@@ -24,7 +27,7 @@ This paper can be found at **fill**.
 
 This documentation explains the structures of the code and data folders to reproduce the results in the paper Ruf and Wang 2020. To run the code provided here, the user needs to:
 
-1. Overwrite the `Data_DIR` variable in the `setup.py` to your own choice.
+1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
 2. Obtain raw data (should you want to work with real datasets) and rename files as detailed in [link](#Data folder structure).
 
 ## Code structure
@@ -47,7 +50,7 @@ The code consists of four sub folders. They are `libaray`, `Simulation`, `Option
 
 In each of the other three folder, there are two python files that are used by other notebooks:
 
-1. `Setup.py`: This file contains all the flags to configure experiments. It varies by datasets, and contains two major functions:
+1. `setup.py`: This file contains all the flags to configure experiments. It varies by datasets, and contains two major functions:
    1. It specifies hedging period, time window size, data cleaning choice, and other experiment setup.
    2. It specifies the location of raw data, clean data  and result.
 2.  `Load_Clean_aux.py` loads the clean data and implements some extra cleaning, before running linear regression or ANNs.
