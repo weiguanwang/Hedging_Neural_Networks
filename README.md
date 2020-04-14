@@ -1,6 +1,6 @@
 # README	
 
-[toc]
+
 
 ## Contact and citation
 
@@ -24,7 +24,7 @@ This paper can be found at **fill**.
 
 This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2020). To run the code provided here, the user needs to:
 
-1. Overwrite the `Data_DIR` variable in the `setup.py` to your own choice.
+1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
 2. Obtain raw data (should you want to work with real datasets) and rename files as detailed in [link](#Data folder structure).
 
 ## Code structure
