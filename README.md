@@ -1,7 +1,5 @@
 # README	
 
-[toc]
-
 ## Contact and citation
 
 Weiguan Wang [w.wang34@lse.ac.uk]()
