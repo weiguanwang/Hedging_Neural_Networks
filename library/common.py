@@ -109,6 +109,10 @@ class Inspector:
             return (df.loc[bl, 'PNL']).mean()
         elif measure == 'median':
             return (df.loc[bl, 'PNL']).median()
+        elif measure == 'lower5%VaR':
+            return (df.loc[bl, 'PNL']).quantile(0.05)
+        elif measure == 'upper95%VaR':
+            return (df.loc[bl, 'PNL']).quantile(0.95)
         else:
             raise NotImplementedError('The given measure is not implemented!')
 
