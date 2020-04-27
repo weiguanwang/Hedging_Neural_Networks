@@ -16,9 +16,7 @@ Department of Mathematics, London School of Economics and Political Science, Lon
 
 Suggested citation:
 
-J. Ruf and W. Wang, Hedging with Neural Networks, arxiv , 2020
-
-This paper can be found at **fill**.
+J. Ruf and W. Wang, Hedging with Neural Networks, arXiv:2004.08891, 2020. Follow the **[link](https://arxiv.org/abs/2004.08891)** to download.
 
 ## Introduction
 
