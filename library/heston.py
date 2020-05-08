@@ -27,7 +27,7 @@ def simulate_heston(params):
 
     w0 = np.random.standard_normal(m-1)
     w1 = np.random.standard_normal(m-1)
-    w1 = rho * w0 + np.sqrt(1 - rho * 2) * w1
+    w1 = rho * w0 + np.sqrt(1 - rho ** 2) * w1
 
     day_count = 253
     dt = 1 / day_count
