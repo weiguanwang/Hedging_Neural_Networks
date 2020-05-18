@@ -1,4 +1,5 @@
 import scipy
+import cmath
 import numpy as np
 import pandas as pd
 
@@ -48,7 +49,6 @@ def simulate_heston(params):
             )
 
 
-
 class ComputeHeston:
     """
     Compute Heston prices by the closed-form formula in Albrecher and Gatheral..
@@ -62,29 +62,31 @@ class ComputeHeston:
 
     def characteristic_func(self, xi, s0, v0, tau):
         ixi = 1j * xi
-        d = scipy.sqrt((self.kappa - ixi * self.rho * self.sigma)**2
+        d = np.sqrt((self.kappa - ixi * self.rho * self.sigma)**2
                        + self.sigma**2 * (ixi + xi**2))
         g = (self.kappa - ixi * self.rho * self.sigma - d) / (self.kappa - ixi * self.rho * self.sigma + d)
-        ee = scipy.exp(-d * tau)
+        ee = cmath.exp(-d * tau)
         C = ixi * self.r * tau + self.kappa * self.theta / self.sigma**2 * (
-            (self.kappa - ixi * self.rho * self.sigma - d) * tau - 2. * scipy.log((1 - g * ee) / (1 - g))
+            (self.kappa - ixi * self.rho * self.sigma - d) * tau - 2. * cmath.log((1 - g * ee) / (1 - g))
         )
         D = (self.kappa - ixi * self.rho * self.sigma - d) / self.sigma**2 * (
             (1 - ee) / (1 - g * ee)
         )
-        return scipy.exp(C + D*v0 + ixi * scipy.log(s0))
+        return cmath.exp(C + D*v0 + ixi * cmath.log(s0))
 
     def integ_func(self, xi, s0, v0, K, tau, num):
         ixi = 1j * xi
         if num == 1:
-            return (self.characteristic_func(xi - 1j, s0, v0, tau) / (ixi * self.characteristic_func(-1j, s0, v0, tau)) * scipy.exp(-ixi * scipy.log(K))).real
+            return (self.characteristic_func(xi - 1j, s0, v0, tau) / (ixi * self.characteristic_func(-1j, s0, v0, tau)) * cmath.exp(-ixi * cmath.log(K))).real
         else:
-            return (self.characteristic_func(xi, s0, v0, tau) / (ixi) * scipy.exp(-ixi * scipy.log(K))).real
+            return (self.characteristic_func(xi, s0, v0, tau) / (ixi) * cmath.exp(-ixi * cmath.log(K))).real
 
     def call_price(self, s0, v0, K, tau):
-        a = s0 * (0.5 + 1 / scipy.pi * quad(lambda xi: self.integ_func(xi, s0, v0, K, tau, 1), 0., 500.)[0])
-        b = K * scipy.exp(-self.r * tau) * (0.5 + 1 / scipy.pi * quad(lambda xi: self.integ_func(xi, s0, v0, K, tau, 2), 0., 500.)[0])
-        return a - b
+    
+        "Simplified form, with only one integration. "
+        h = lambda xi: s0 * self.integ_func(xi, s0, v0, K, tau, 1) - K * np.exp(-self.r * tau) * self.integ_func(xi, s0, v0, K, tau, 2)
+        res = 0.5 * (s0 - K * np.exp(-self.r * tau)) + 1/scipy.pi * quad(h, 0, 500.)[0]
+        return res
 
 
 def hs_price_wrapper(

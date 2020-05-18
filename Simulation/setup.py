@@ -192,7 +192,8 @@ MIN_M, MAX_M = 0.8, 1.5
 Network feature choice
 """
 #FEATURE_SET = 'normal_feature'
-FEATURE_SET = 'delta_vega'
+#FEATURE_SET = 'delta_vega'
+FEATURE_SET = 'delta_vega_vanna'
 
 
 
