@@ -4,19 +4,25 @@
 
 ## Contact and citation
 
-Weiguan Wang [w.wang34@lse.ac.uk]()
+Authors and affiliation:
 
-Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
+   Weiguan Wang [w.wang34@lse.ac.uk]()
 
-Department of Mathematics, London School of Economics and Political Science, London, United Kingdom
+   Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
 
-14 April 2020
+   Department of Mathematics, London School of Economics and Political Science, London, United Kingdom
+
+   14 April 2020
 
 
 
 Suggested citation:
 
-J. Ruf and W. Wang, Hedging with Neural Networks, SSRN 3580132, 2020. Follow the **[link](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132)** to download.
+   J. Ruf and W. Wang, Hedging with Neural Networks, SSRN 3580132, 2020. Follow the **[link](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132)** to download.
+   
+Supplementary reading:
+
+   J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, Journal of Computational Finance, volume 24, number 1, pages 1-45. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363
 
 ## Introduction
 
