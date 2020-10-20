@@ -9,7 +9,7 @@ import datetime
 
 if getpass.getuser() in ['Weiguan', 'weiguan']:
     if sys.platform == 'win32':
-        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Debug_0404\\Euroxx\\'
+        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Data\\Euroxx\\'
     if sys.platform == 'linux':
         DATA_DIR = '/home/weiguan/Dropbox/Research/DeepHedging/Data/Euroxx/'
 if getpass.getuser() in ['rufj']:
@@ -22,7 +22,7 @@ RANDOM_SEED = 600
 NORM_FACTOR = 100
 
 # Matching delay
-MAX_LAG = pd.Timedelta('0.5 hours')
+MAX_LAG = pd.Timedelta('1 hours')
 MATCH_TOL_DICT = {
     '1H': pd.Timedelta('1 hours'),
     '0.5H': pd.Timedelta('0.5 hours'),
@@ -62,17 +62,17 @@ if FREQ == '2D':
 DATE_BEGIN = pd.Timestamp('2016-01-04')
 DATE_END = pd.Timestamp('2018-07-26')
 
-""" Rolling window """
-span_train = '360D'
-span_val = '90D'
-span_test = '90D'
-date_window = '90D'
+# """ Rolling window """
+# span_train = '360D'
+# span_val = '90D'
+# span_test = '90D'
+# date_window = '90D'
 
-# """ Single window """
-# span_train = '600D'
-# span_val = '150D'
-# span_test = '150D'
-# date_window = '150D'
+""" Single window """
+span_train = '600D'
+span_val = '150D'
+span_test = '150D'
+date_window = '150D'
 
 
 SPAN_TRAIN = pd.Timedelta(span_train)
@@ -105,7 +105,6 @@ CLOSENESS = False
 CLOSENESS_GAP = pd.Timedelta('5m')
 
 
-
 # business day
 MIN_TAU_Days = 0
 MIN_TAU = MIN_TAU_Days / 253.
@@ -113,9 +112,17 @@ MIN_TAU = MIN_TAU_Days / 253.
 """
 Below is network setup.
 """
+# Output activation function.
+# OUTACT = 'normcdf'
+OUTACT = 'linear'
+
 # Network feature choice
-# FEATURE_SET = 'normal_feature'
-FEATURE_SET = 'delta_vega'
+#FEATURE_SET = 'normal_feature'
+#FEATURE_SET = 'delta_vega'
+FEATURE_SET = 'delta_vega_vanna'
+#FEATURE_SET = 'spot_strike'
+#FEATURE_SET = 'spot_strike_2'
+
 
 # Tune Hyperparameters
 NUM_REPEATS = 5

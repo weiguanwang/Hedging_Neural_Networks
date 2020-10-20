@@ -15,8 +15,8 @@ if getpass.getuser() in ['rufj']:
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
-UNDERLYING_MODEL = 'Heston'
-CONFIG = '4'
+UNDERLYING_MODEL = 'BS'
+CONFIG = '1'
 
 """
 Simulation setup.
@@ -110,7 +110,7 @@ elif UNDERLYING_MODEL == 'Heston':
             'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
         }
     elif CONFIG == '4':
-        # zero drift
+        # zero drift, configuration for the paper
         UNDERLYINGPARAS = {
             'mu': 0,
             'kappa': 5,
@@ -192,8 +192,8 @@ MIN_M, MAX_M = 0.8, 1.5
 Network feature choice
 """
 #FEATURE_SET = 'normal_feature'
-#FEATURE_SET = 'delta_vega'
-FEATURE_SET = 'delta_vega_vanna'
+FEATURE_SET = 'delta_vega'
+#FEATURE_SET = 'delta_vega_vanna'
 
 
 

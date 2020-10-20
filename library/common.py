@@ -4,6 +4,7 @@ import copy
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from pandas.tseries.offsets import BDay, DateOffset, WeekOfMonth
 from sklearn.model_selection import train_test_split
@@ -60,6 +61,46 @@ def store_pnl(
         
     df_res.to_csv(pnl_path)
     
+
+def calc_pnl_two_assets(df, delta, eta, V1='V1_n'):
+    """ 
+    This methods calcuate the PnL, given a strategy of two 
+    hedging instruments.
+    For the moment, we use underlying and the ATM one-month option.
+    """
+    s0, s1 = df['S0_n'], df['S1_n']
+    v0, v1 = df['V0_n'], df[V1]
+    atm0, atm1 = df['V0_atm_n'], df['V1_atm_n']
+    on_return = df['on_ret']
+
+    v1_hat = (v0 - delta * s0 - eta * atm0) * on_return + delta * s1 + eta * atm1
+    return v1_hat - v1
+
+
+def store_pnl_two_assets(df, delta, eta, pnl_path, V1='V1_n'):
+    delta = delta[df['Is_In_Some_Test']]
+    eta = eta[df['Is_In_Some_Test']]
+    df = df[df['Is_In_Some_Test']]
+
+    cols = [x for x in df.columns if x in ['ExecuteTime0', 'Aggressorside']]
+    cols += ['cp_int', 'date']
+    df_res = df[cols].copy()
+    df_res['delta'] = delta
+    df_res['eta'] = eta
+    df_res['PNL'] = calc_pnl_two_assets(df, delta, eta, V1=V1)
+    df_res['M0'] = df['M0'].copy()
+    df_res['tau0'] = df['tau0'].copy()
+    
+    df_res['testperiod'] = np.nan
+    # In addition, we want to record which test period the pnl is from.
+    max_period = max([int(s[6:]) for s in df.columns if 'period' in s])
+    for i in range(0, max_period + 1):
+        bl = df['period{}'.format(i)] == 2
+        df_res.loc[bl, 'testperiod'] = i
+        
+    df_res.to_csv(pnl_path)
+
+
 
 def permute_core(df, i_period, random_seed):
     """
@@ -155,7 +196,7 @@ class Inspector:
             else:
                 df_res.loc[r, c] = np.nan
         
-        bs_name = 'Regression/BS_Benchmark'
+        bs_name = [x for x in df_dirs.index.tolist() if 'BS_Benchmark' in x][0]
         for c in cols:
             tmp = (df_res.loc[:, (c, 'Absolute')] - df_res.loc[bs_name, (c, 'Absolute')]) / \
                 df_res.loc[bs_name, (c, 'Absolute')] * 100.
@@ -254,3 +295,43 @@ class LocalInspector(PnlLoader):
                 self.record.loc[i, key] = (pnl.loc[bl, 'PNL']**2).mean()
 
         return self.record   
+
+
+def compare_pair(daily_mshe, first, second, trunc_qs):
+    N = daily_mshe.shape[0]
+    print('Size of N:', N)
+    diff = daily_mshe[first] - daily_mshe[second]
+    for q in trunc_qs:
+        cap = diff.abs().quantile(q)
+        
+        truncated_diff = np.maximum(np.minimum(diff, cap), -cap)
+        zscore = truncated_diff.mean() / truncated_diff.std() * np.sqrt(N)
+        print(f'Mean difference is {truncated_diff.mean()}')
+        print(f'Std is {truncated_diff.std()}')
+        print(f'Z-score after truncating at {q} is {zscore}')
+        
+        truncated_diff.plot()
+        plt.show()
+        truncated_diff.plot(kind='hist', logy=True, bins=100)
+        plt.show()
+
+
+def truncate_daily_mshe(daily_mshe, first, second, q):
+    diff = daily_mshe[first] - daily_mshe[second]
+    cap = diff.abs().quantile(q)
+    truncated_diff = np.maximum(np.minimum(diff, cap), -cap)
+    return truncated_diff
+        
+def get_zscore(daily_mshe, first, second, q):
+    N = daily_mshe.shape[0]
+    truncated_diff = truncate_daily_mshe(daily_mshe, first, second, q)
+    zscore = truncated_diff.mean() / truncated_diff.std() * np.sqrt(N)
+    return zscore
+
+
+def get_z_confidence(daily_mshe, first, second, q):
+    N = daily_mshe.shape[0]
+    truncated_diff = truncate_daily_mshe(daily_mshe, first, second, q)
+    up = truncated_diff.mean() + 2* truncated_diff.std() / np.sqrt(N)
+    down = truncated_diff.mean() - 2* truncated_diff.std() / np.sqrt(N)
+    return down, up

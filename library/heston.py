@@ -107,4 +107,49 @@ def hs_price_wrapper(
     return df
 
 
+def hs_price_1M_ATM_wrapper(df, pricer, s_name, var_name, tau_name, v_name):
+    """ for each row, calculate the one-month ATM call price. """
+    for ix, row in df.iterrows():
+        s, var = row[s_name], row[var_name]
+        k, tau = row['K'], row[tau_name]
+        if tau < 0.0039:
+            df.loc[ix, v_name] = np.maximum(s-k, 0)
+        else:
+            price = pricer.call_price(s, var, k, tau)
+        df.loc[ix, v_name] = price
+    return df
+
+
+def calc_Heston_delta_by_FD(s0, v0, k, tau, pricer):
+    ds = s0 * 0.001
+    p_plus = pricer.call_price(s0 + ds, v0, k, tau)
+    p_minus = pricer.call_price(s0 - ds, v0, k, tau)
+    return (p_plus - p_minus) / (2 * ds)
+
+
+def calc_Heston_vega_by_FD(s0, v0, k, tau, pricer):
+    " This is the sensitivity of price w.r.t variance, not to vega "
+    dv = v0 * 0.001
+    p_plus = pricer.call_price(s0, v0 + dv, k, tau)
+    p_minus = pricer.call_price(s0, v0 - dv, k, tau)
+    return (p_plus - p_minus) / (2 * dv)
+
+
+def calc_Heston_delta_vega_wrapper(df, pricer, s_name, k_name, var_name, tau_name, delta_name, vega_name):
+    for key, row in df.iterrows():
+        s0, v0, k, tau = row[s_name], row[var_name], row[k_name], row[tau_name]
+        d = calc_Heston_delta_by_FD(s0, v0, k, tau, pricer)
+        df.loc[key, delta_name] = d
+        df.loc[key, vega_name] = calc_Heston_vega_by_FD(s0, v0, k, tau, pricer)
+    return df
+
+
+
+
+
+
+
+
+
+
 

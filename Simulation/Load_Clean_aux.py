@@ -31,7 +31,7 @@ ori_size = df.shape[0]
 
 
 """
-Remove all extra cols except one.
+Remove all extra cols for other hedging periods, except one.
 """
 laux.remove_cols_rename(df, setup.OFFSET_DICT, setup.FREQ)
 df['on_ret'] = np.exp(df['short_rate'] * setup.DT)
@@ -62,6 +62,7 @@ print(f'Original data size is {df.shape[0]}')
 df = laux.choose_half_shrink_moneyness(df, ori_size, setup.HALF_MONEY, setup.MIN_M, setup.MAX_M)
 bl = df['V1'].notna()
 cm.print_removal(df.shape[0], sum(bl), ori_size, 'We remove samples when S1 is not available')
+
 df_train = df.loc[bl]
 df_train = laux.make_features(df_train)
 del df
@@ -88,6 +89,10 @@ for i in range(setup.NUM_TEST):
         end_date=df_test['date'].max()
     )
     ori_size = df_test.shape[0]
+    
+   
+    
+    
     df_test = laux.choose_half_shrink_moneyness(df_test, ori_size, setup.HALF_MONEY, setup.MIN_M, setup.MAX_M)
     bl = df_test['V1'].notna()
     cm.print_removal(df_test.shape[0], sum(bl), ori_size, 'We remove samples when S1 is not available')

@@ -58,14 +58,17 @@ def rolling_lin_reg(
         end_period,
         agg_side=None,  # if true, data get stratified by aggressor_side, too
         delta_coeff_1=False,  
-        leverage=False
+        leverage=False,
+        bucket=None
 ):
     deltas = pd.Series(index=df.index)
     
     cols_by = ['cp_int']
     if agg_side:
         cols_by += ['AggressorSide']
-    
+    if bucket:
+        cols_by += ['bucket']
+
     grouped = df.groupby(by=cols_by)
 
     groupnames = [str(x) for x in grouped.groups.keys()]
@@ -110,7 +113,8 @@ def run_store_lin(
         max_period=None,
         delta_coeff_1=None,  
         agg_side=None,
-        leverage=False
+        leverage=False,
+        bucket=None
 ):
     if vix:
         print('VIX is used!')
@@ -124,7 +128,8 @@ def run_store_lin(
         end_period=max_period,
         delta_coeff_1=delta_coeff_1,
         agg_side=agg_side,
-        leverage=leverage
+        leverage=leverage,
+        bucket=bucket
     )
     if not delta_coeff_1:    
         cm.store_pnl(df, res_dict['delta'], pnl_path)   

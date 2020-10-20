@@ -52,10 +52,13 @@ def remove_cols_rename(df, whole_dict, single_key, future_volume=None):
     tmp = {
         f'S{whole_dict[single_key][1]}': 'S1',
         f'V{whole_dict[single_key][1]}': 'V1',
+        f'V{whole_dict[single_key][1]}_atm': 'V1_atm',
         f'implvol{whole_dict[single_key][1]}': 'implvol1',
         f'S{whole_dict[single_key][1]}_n': 'S1_n',
-        f'V{whole_dict[single_key][1]}_n': 'V1_n'
+        f'V{whole_dict[single_key][1]}_n': 'V1_n',
+        f'V{whole_dict[single_key][1]}_atm_n': 'V1_atm_n'
     }
+
     if future_volume:
         tmp[f'volume{whole_dict[single_key][1]}'] = 'volume1'
     df.rename(columns=tmp, inplace=True)

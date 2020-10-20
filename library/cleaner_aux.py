@@ -7,6 +7,8 @@ from scipy.interpolate import interp1d
 from scipy.stats import norm
 from scipy.optimize import brentq
 
+from . import heston as hs
+
 
 def get_time2maturity(
         dates,
@@ -70,6 +72,10 @@ def add_tomorrow(
         'S0': f'S{offset_key}', 
         'V0': f'V{offset_key}', 
         'implvol0': f'implvol{offset_key}'}
+    if 'Var0' in df.columns:
+        tmp += ['Var0']
+        new_cols['Var0'] = f'Var{offset_key}'
+
     if future_vol:
         tmp += ['volume']
         new_cols['volume'] = f'volume{offset_key}'
@@ -82,6 +88,7 @@ def add_tomorrow(
     df = df.join(df_tmp.set_index(['date', 'optionid']), on=['date', 'optionid'])
 
     return df
+
 
 
 def bs_formula_call(vol, S, K, tau, r):
@@ -138,6 +145,13 @@ def bs_call_delta(vol, S, K, tau, r):
 
 def bs_put_delta(vol, S, K, tau, r):
     return bs_call_delta(vol, S, K, tau, r) - 1.
+
+
+def bs_call_theta(vol, S, K, tau, r):
+    d1 = calc_d1(vol, S, K, tau, r)
+    d2 = d1 - vol * np.sqrt(tau)
+    theta = - S * norm.pdf(d1) * vol / (2 * np.sqrt(tau + 1e-10)) - r * K * np.exp(-r * tau) * norm.cdf(d2)
+    return theta
 
 
 def bs_gamma(vol, S, K, tau, r):
@@ -233,3 +247,103 @@ def normalize_prices(
     df[cols_after] = df[cols].values / (s_divisor / norm_factor)[:, np.newaxis]
     return df
 
+
+def append_1M_ATM_option(mc_one, paras):
+    """ Append 1 month ATM option to each date, and its future prices and greeks """
+    underlying_model = paras['underlying_model']
+    underlying_paras = paras['underlying_paras']
+    other_paras = paras['other_paras']
+    offset_dict = paras['offset_dict']
+    if underlying_model == 'Heston':
+        heston_pricer = hs.ComputeHeston(
+            underlying_paras['kappa'], 
+            underlying_paras['theta'], 
+            underlying_paras['sigma'], 
+            underlying_paras['rho'], 
+            other_paras['short_rate'])
+        
+    use_cols = ['date', 'S0', 'short_rate', 'r']
+    if underlying_model == 'Heston':
+        use_cols += ['Var0']
+    mc_atm = mc_one[use_cols]
+    " We only need one row for each day "
+    mc_atm = mc_atm.drop_duplicates()
+    " ATM and one-month "
+    mc_atm['K'] = mc_atm['S0']
+    mc_atm['tau0'] = 1/12.
+    " Assume all CALLs "
+    mc_atm['cp_int'] = 0
+    " Calculate V0 "
+    if underlying_model == 'BS':
+        mc_atm['implvol0'] = underlying_paras['volatility']
+        mc_atm['V0'] = bs_call_price(mc_atm['implvol0'], mc_atm['S0'], mc_atm['K'], mc_atm['tau0'], mc_atm['r'])
+
+    elif underlying_model == 'Heston':
+        mc_atm = hs.hs_price_1M_ATM_wrapper(mc_atm, heston_pricer, s_name=f'S0',
+                                       var_name=f'Var0', tau_name=f'tau0',
+                                       v_name=f'V0')   
+        
+        mc_atm = calc_implvol(mc_atm)
+    mc_atm.rename({'V0': 'V0_atm'}, inplace=True, axis=1)
+        
+    " For each hedging period "
+    for key, value in offset_dict.items():
+        tmp = ['date', 'S0']
+        new_cols = {
+                'S0': f'S{value[1]}'}
+        if underlying_model == 'Heston':
+            tmp += ['Var0']
+            new_cols['Var0'] = f'Var{value[1]}'
+
+        df_tmp = mc_atm[tmp].copy()
+        df_tmp['date'] -= value[0]
+        df_tmp.rename(columns=new_cols, inplace=True) 
+        " Join S and Var by date with offset "
+        mc_atm = mc_atm.join(df_tmp.set_index(['date']), on=['date'])
+        mc_atm[f'tau{value[1]}'] = mc_atm['tau0'] - value[0].n / 253.
+        
+        if underlying_model == 'BS':
+            mc_atm[f'V{value[1]}_atm'] = bs_call_price(
+                mc_atm['implvol0'], mc_atm[f'S{value[1]}'], mc_atm['K'], 
+                mc_atm[f'tau{value[1]}'], mc_atm['r'])
+        elif underlying_model == 'Heston':
+            " Calculate V_1D_atm, V_2D_atm, V_5D_atm"
+            " No need to calculate implvol for the future "
+            mc_atm = hs.hs_price_1M_ATM_wrapper(mc_atm, heston_pricer, s_name=f'S{value[1]}',
+                                       var_name=f'Var{value[1]}', tau_name=f'tau{value[1]}',
+                                       v_name=f'V{value[1]}_atm')
+    
+    """ Normalize price and Calculate Sensitivity """
+    cols_to_normalize = (['S' + value[1] for key, value in offset_dict.items()]
+                         + [f'V{value[1]}_atm' for key, value in offset_dict.items()])
+    mc_atm = normalize_prices(
+        mc_atm,
+        s_divisor=mc_atm['S0'],
+        norm_factor=other_paras['norm_factor'],
+        cols=['S0', 'V0_atm', 'K'] + cols_to_normalize
+    )
+    
+    vol, S, K, tau, r = mc_atm['implvol0'], mc_atm['S0_n'], mc_atm['K_n'], mc_atm['tau0'], mc_atm['r']
+    mc_atm['delta_bs_atm'] = bs_call_delta(vol, S, K, tau, r) 
+    mc_atm['vega_atm_n'] = bs_vega(vol, S, K, tau, r )
+    mc_atm['gamma_atm_n'] = bs_gamma(vol, S, K, tau, r )
+    mc_atm['vanna_atm_n'] = bs_vanna(vol, S, K, tau, r )
+    mc_atm['theta_atm_n'] = bs_call_theta(vol, S, K, tau, r)
+
+    if underlying_model == 'Heston':
+        " Calculate Heston Delta and Vega "
+        mc_atm = hs.calc_Heston_delta_vega_wrapper(
+            mc_atm, heston_pricer, 'S0_n', 'K_n', 'Var0', 'tau0', 'delta_hs_atm', 'vega_hs_atm_n'
+        )
+        
+
+    """ Join by date """
+    use_cols = ['date', 'V0_atm', 'V_1D_atm', 'V_2D_atm', 'V_5D_atm', 'V0_atm_n', 'V_1D_atm_n',
+          'V_2D_atm_n', 'V_5D_atm_n', 'delta_bs_atm', 'vega_atm_n', 'gamma_atm_n',
+           'vanna_atm_n', 'theta_atm_n']
+    if underlying_model == 'Heston':
+        use_cols += ['delta_hs_atm', 'vega_hs_atm_n']
+        
+    mc_one = mc_one.join(mc_atm[use_cols].set_index(['date']), on=['date'])
+
+    return mc_one

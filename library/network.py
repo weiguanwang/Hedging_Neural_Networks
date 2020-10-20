@@ -48,7 +48,7 @@ class HedgeNet:
             self, feature_shape,
             nodes_per_layer,
             lr=0.001,
-            outact='linear',
+            outact=None,
             loss='mse',
             metrics=[None],
             reg_alpha=1e-4,

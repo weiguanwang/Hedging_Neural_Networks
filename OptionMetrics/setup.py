@@ -8,7 +8,7 @@ from pandas.tseries.offsets import BDay
 
 if getpass.getuser() in ['Weiguan', 'weiguan']:
     if sys.platform == 'win32':
-        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Debug_0404\\OptionMetrics\\'
+        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Data\\OptionMetrics\\'
     if sys.platform == 'linux':
         DATA_DIR = '/home/weiguan/Dropbox/Research/DeepHedging/Data/OptionMetrics/'
 if getpass.getuser() in ['rufj']:
@@ -40,7 +40,7 @@ NORM_FACTOR = 100.
 # Choose hedge time frequency.
 # this is the gap between current and next time stamp.
 # Choose 1 for daily, 5 for weekly. Business day convention.
-FREQ = '1D'
+FREQ = '2D'
 if FREQ == '1D':    
     DT = 1 / 253.
 if FREQ == '2D':
@@ -65,16 +65,16 @@ REMOVE_TMR_ZERO_VOLUME = False
 DATE_BEGIN = pd.Timestamp('2010-01-01')
 DATE_END = pd.Timestamp('2019-06-27')
 
-span_train = '720D'
-span_val = '180D'
-span_test = '180D'
-date_window = '180D'
+# span_train = '720D'
+# span_val = '180D'
+# span_test = '180D'
+# date_window = '180D'
 
-# """ Single window setup """
-# span_train = '2280D'
-# span_val = '570D'
-# span_test = '570D'
-# date_window = '570D'
+""" Single window setup """
+span_train = '2280D'
+span_val = '570D'
+span_test = '570D'
+date_window = '570D'
 
 SPAN_TRAIN = pd.Timedelta(span_train)
 SPAN_VAL = pd.Timedelta(span_val)
@@ -105,13 +105,15 @@ Network related paras
 """
 
 # Output activation function.
-#OUTACT = 'normcdf'
+# OUTACT = 'normcdf'
 OUTACT = 'linear'
 
 # Network feature choice
-# FEATURE_SET = 'normal_feature'
+#FEATURE_SET = 'normal_feature'
 FEATURE_SET = 'delta_vega'
-
+#FEATURE_SET = 'delta_vega_vanna'
+#FEATURE_SET = 'spot_strike'
+#FEATURE_SET = 'spot_strike_2'
 
 # Hyper parameters tuning
 NUM_PERIOD_END = 4
