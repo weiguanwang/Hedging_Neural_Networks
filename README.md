@@ -63,7 +63,7 @@ The notebooks have a very similar structure as follows:
 3. `3_Tuning _Hyper.ipynb` implements the tuning of $L^2 $ regularisation parameters. 
 4. `4_Network.ipynb` implements the training of the ANN and stores the PNL files (MSHE of ANN).
 6. `5_Diagnostic.ipynb` creates tables to summarize PNL (MSHE) files in terms of given performance measure, across several experimental setups, i.e. globally for each dataset.
-7. `6_Local_Diag_And_Plots.ipynb` implements the diagnostics of PNL files for a single experimental setup. Plots made from PNL files are generated in this file. They include linear regression coefficients, mean squared hedging error plots, MSHE vs sensitivities, etc.
+7. `6_Local_Diag_And_Plots.ipynb` implements the diagnostics of PNL files for a single experimental setup. Plots made from PNL files are generated in this file. They include linear regression coefficients, mean squared hedging error plots, MSHE vs sensitivities, confidence interval and etc.
 8. `7_Analysis_of_(Semi-)CleanData.ipynb` implements the analysis of raw and clean data. They include histograms of certain features, number of samples in each time window, volatility, leverage effect, etc.
 9. `8_Permute_VIX_Analysis.ipynb` implements the analysis of permutation and fake VIX experiments. The implementation of the experiment is done in notebook 4 and 5, by giving the corresponding setup flags. This notebook only exists for the Simulation and OptionMetrics folders.
 9. `9_Bucket_Moneyness.ipynb` splits the data set by moneyness into several buckets, and runs statistical models on each bucket independently. 
