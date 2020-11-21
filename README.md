@@ -6,7 +6,7 @@
 
 Authors and affiliation:
 
-   Weiguan Wang [w.wang34@lse.ac.uk]()
+   Weiguan Wang [w.wang34@lse.ac.uk](), https://weiguanwang.github.io/
 
    Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
 
