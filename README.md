@@ -12,13 +12,13 @@
 
    Department of Mathematics, London School of Economics and Political Science, London, United Kingdom
 
-   14 April 2020
+   15 December 2020
 
 
 
 *Suggested citation:*
 
-   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statisitcs subject to minor corrections. Dowdload at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132).
+   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statisitcs subject to minor corrections. Dowdload at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
 
 *Supplementary reading:*
 
