@@ -4,7 +4,7 @@
 
 ## Contact and citation
 
-Authors and affiliation:
+*Authors and affiliation:*
 
    Weiguan Wang [w.wang34@lse.ac.uk](), https://weiguanwang.github.io/
 
@@ -16,11 +16,11 @@ Authors and affiliation:
 
 
 
-Suggested citation:
+*Suggested citation:*
 
-   J. Ruf and W. Wang, Hedging with Neural Networks, SSRN 3580132, 2020. Follow the **[link](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132)** to download.
+   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statisitcs subject to minor corrections. Dowdload at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132).
 
-Supplementary reading:
+*Supplementary reading:*
 
    J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, Journal of Computational Finance, volume 24, number 1, pages 1-45. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363
 
