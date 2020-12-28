@@ -18,7 +18,7 @@
 
 *Suggested citation:*
 
-   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statisitcs subject to minor corrections. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
+   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statistics subject to minor corrections. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
 
 *Supplementary reading:*
 
