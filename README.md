@@ -20,17 +20,12 @@
 
    J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, *Journal of Computational Finance*, volume 24, number 1, pages 1-45, 2020. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363Introduction
 
-This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2021). To run the code provided here, the user needs to:
-
-1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
-2. Obtain raw data (should you want to work with historical datasets) and rename files as detailed in [Data folder strucuture](#Data-folder-structure).
-
 ## Introduction
 
 This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2021). To run the code provided here, the user needs to:
 
 1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
-2. Obtain raw data (should you want to work with real datasets) and rename files as detailed in [link](#Data folder structure).
+2. Obtain raw data (should you want to work with historical datasets) and rename files as detailed in [Data folder strucuture](#Data-folder-structure).
 
 ## Code structure
 
