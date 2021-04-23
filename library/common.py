@@ -102,45 +102,13 @@ def store_pnl_two_assets(df, delta, eta, pnl_path, V1='V1_n'):
 
 
 
-def permute_core(df, i_period, random_seed):
-    """
-    df: is a union of training, validation (if any), and the test.
-    """ 
-    df_train = df.loc[(df[f'period{i_period}'] == 0)]
-    df_val = df.loc[(df[f'period{i_period}'] == 1)]
-    df_test = df.loc[(df[f'period{i_period}'] == 2)]
-    val_size = df_val.shape[0]
-    test_size = df_test.shape[0]
-    
-    id_total = df_train.index.append([df_val.index, df_test.index])
-    _, new_test = train_test_split(id_total, test_size=test_size, random_state=random_seed)
-    new_train, new_val = train_test_split(_, test_size=val_size, random_state=random_seed)
-    
-    # We permute simply by changing flag value. 
-    df.loc[new_train, f'period{i_period}'] = 0
-    df.loc[new_val, f'period{i_period}'] = 1
-    df.loc[new_test, f'period{i_period}'] = 2 
-    df.loc[new_test, 'Is_In_Some_Test'] = True
-    return df
-
-
-def rolling_permute(df, random_seed):
-    """
-    This function calls the permute_core and permute for each period.
-    """
-    max_period = max([int(s[6:]) for s in df.columns if 'period' in s])
-    df['Is_In_Some_Test'] = False
-    for i in range(max_period + 1):
-        df = permute_core(df, i, random_seed=random_seed+i)
-    return df 
-
-
 class Inspector:
     def __init__(self):
         pass
 
     def loadPnl(self, path, measure, op_type=None):
         df = pd.read_csv(path, index_col=0)
+
 
         bl = self.choose_op_type(df, op_type)
 

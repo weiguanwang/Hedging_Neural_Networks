@@ -1,3 +1,4 @@
+import datetime
 import scipy
 import cmath
 import numpy as np
@@ -95,6 +96,8 @@ def hs_price_wrapper(
     Note: Integration warning comes up if the option is
     deep-in or out-of-money when time-to-maturity is small (although non-zero)
     """
+    ts = datetime.datetime.now()
+    print('Start time (computing Heston prices):', ts)
     for ix, row in df.iterrows():
         s, var, tau = row['S0'], row['Var0'], row['tau0']
         k = row['K']
@@ -103,7 +106,9 @@ def hs_price_wrapper(
         else:
             price = pricer.call_price(s, var, k, tau)
             df.loc[ix, 'V0'] = price
-
+    te = datetime.datetime.now()
+    print('Finish time (computing Heston prices):', te)
+    print('Time spent: ', te - ts)
     return df
 
 

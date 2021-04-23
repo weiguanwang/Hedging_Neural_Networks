@@ -9,7 +9,7 @@ import datetime
 
 if getpass.getuser() in ['Weiguan', 'weiguan']:
     if sys.platform == 'win32':
-        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Data\\Euroxx\\'
+        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\01_DeepHedging\\Data_OKKK\\Euroxx\\'
     if sys.platform == 'linux':
         DATA_DIR = '/home/weiguan/Dropbox/Research/DeepHedging/Data/Euroxx/'
 if getpass.getuser() in ['rufj']:
@@ -37,15 +37,7 @@ OFFSET_DICT = {
     '2D': [BDay(2), '_2D']
 }
 
-
-VIXPARAS = {
-    'vix0': 13,
-    'kappa': 1,
-    'sigma': 25,
-    'mu': 15
-}
-
-FREQ = '1D'
+FREQ = '1H'
 
 T_FIRSTHALF = datetime.time(8, 30)
 if FREQ == '1H':
@@ -91,13 +83,7 @@ HALF_MONEY = 'otm'
 
 # Some additional selections after data are cleaned.
 MIN_M, MAX_M = 0.8, 1.5
-AGG_SIDE_FLAG = False
-
-
-PERMUTE = False
-NUM_PERMUTE = 5
-
-VIX = False
+AGG_SIDE_FLAG = False   # aggressor side: for buy and sell order
 
 
 """ Closeness gap """
@@ -117,11 +103,11 @@ Below is network setup.
 OUTACT = 'linear'
 
 # Network feature choice
-#FEATURE_SET = 'normal_feature'
-#FEATURE_SET = 'delta_vega'
+# FEATURE_SET = 'normal_feature'
+# FEATURE_SET = 'delta_vega'
 FEATURE_SET = 'delta_vega_vanna'
 #FEATURE_SET = 'spot_strike'
-#FEATURE_SET = 'spot_strike_2'
+# FEATURE_SET = 'spot_strike_2'
 
 
 # Tune Hyperparameters
@@ -132,4 +118,4 @@ END_PERIODS = 1
 """
 Set result folder
 """
-res_dir = f'{DATA_DIR}Result/FREQ={FREQ}_HALFMONEY={HALF_MONEY}_MINM={MIN_M}_MAXM={MAX_M}_MINTAU={MIN_TAU_Days}_Permute={PERMUTE}_VIX={VIX}_WINDOW={date_window}_AGGSIDE={AGG_SIDE_FLAG}_MATCHING={MATCH_TOL}_CLOSENESS={CLOSENESS}/'
+res_dir = f'{DATA_DIR}Result/FREQ={FREQ}_HALFMONEY={HALF_MONEY}_MINM={MIN_M}_MAXM={MAX_M}_MINTAU={MIN_TAU_Days}_WINDOW={date_window}_AGGSIDE={AGG_SIDE_FLAG}_MATCHING={MATCH_TOL}_CLOSENESS={CLOSENESS}/'

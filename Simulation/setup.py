@@ -7,7 +7,7 @@ from pandas.tseries.offsets import BDay
 
 if getpass.getuser() in ['Weiguan', 'weiguan']:
     if sys.platform == 'win32':
-        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\DeepHedging\\Data\\' 
+        DATA_DIR = 'C:\\Users\\Weiguan\\Dropbox\\Research\\01_DeepHedging\\Data\\' 
     if sys.platform == 'linux':
         DATA_DIR = '/home/weiguan/Dropbox/Research/DeepHedging/Data/'
 if getpass.getuser() in ['rufj']:
@@ -15,8 +15,8 @@ if getpass.getuser() in ['rufj']:
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
-UNDERLYING_MODEL = 'BS'
-CONFIG = '1'
+UNDERLYING_MODEL = 'Heston'
+CONFIG = '6'
 
 """
 Simulation setup.
@@ -67,7 +67,8 @@ if UNDERLYING_MODEL == 'BS':
             'start_date': pd.Timestamp('2018/07/01'),
             'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
         }   
-        
+
+
         
 elif UNDERLYING_MODEL == 'Heston':
     DATA_DIR += 'Heston/'
@@ -122,21 +123,56 @@ elif UNDERLYING_MODEL == 'Heston':
             'start_date': pd.Timestamp('2018/07/01'),
             'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
         }
-
-        
+    elif CONFIG == '5':
+        # zero drift, AND -1 correlation.
+        UNDERLYINGPARAS = {
+            'mu': 0,
+            'kappa': 5,
+            'theta': 0.04,
+            'sigma': 0.3,
+            'rho': -1.,
+            's0': 2000.,
+            'v0': 0.04,
+            'start_date': pd.Timestamp('2018/07/01'),
+            'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
+        }
+    elif CONFIG == '6':
+        # zero drift, AND -1 correlation, AND kappa = 1.5
+        # I need smaller kappa to check why in Heston, 2D regressions seems work worse than 1D
+        # Minimum kappa is 1.125 due to Feller's test.
+        UNDERLYINGPARAS = {
+            'mu': 0,
+            'kappa': 1.5,
+            'theta': 0.04,
+            'sigma': 0.3,
+            'rho': -1.,
+            's0': 2000.,
+            'v0': 0.04,
+            'start_date': pd.Timestamp('2018/07/01'),
+            'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
+        }
+    elif CONFIG == '7':
+        # zero drift, AND -1 correlation, AND kappa = 10
+        UNDERLYINGPARAS = {
+            'mu': 0,
+            'kappa': 10,
+            'theta': 0.04,
+            'sigma': 0.3,
+            'rho': -1.,
+            's0': 2000.,
+            'v0': 0.04,
+            'start_date': pd.Timestamp('2018/07/01'),
+            'end_date': pd.Timestamp('2018/07/01') + pd.Timedelta('450D')
+        }
+       
+    
+    
 OPTIONPARAS = {
     'threshold': 1,
     'step_K': 5
 }
 
-    
 
-VIXPARAS = {
-    'vix0': 13,
-    'kappa': 1,
-    'sigma': 25,
-    'mu': 15
-}
 
 OTHERPARAS = {
     'short_rate': 0.,
@@ -155,7 +191,7 @@ THRESHOLD_REMOVE_DATA = 0.01
 
 # this is the gap between current and next time stamp.
 # Choose 1 for daily, 5 for weekly. Business day convention.
-FREQ = '2D'
+FREQ = '1D'
 if FREQ == '1D':    
     DT = 1 / 253.
 if FREQ == '2D':
@@ -167,15 +203,6 @@ if FREQ == '5D':
 # Monte Carlo setup
 NUM_TEST = 20
 
-
-
-""" Permutation """
-PERMUTE = False
-
-"""
-Fake VIX
-"""
-VIX = False
 
 
     
@@ -192,13 +219,13 @@ MIN_M, MAX_M = 0.8, 1.5
 Network feature choice
 """
 #FEATURE_SET = 'normal_feature'
-FEATURE_SET = 'delta_vega'
-#FEATURE_SET = 'delta_vega_vanna'
+#FEATURE_SET = 'delta_vega'
+FEATURE_SET = 'delta_vega_vanna'
 
 
 
 """
 Set result folder
 """
-res_dir = f'{DATA_DIR}Result/CONFIG={CONFIG}/FREQ={FREQ}_HALFMONEY={HALF_MONEY}_MINM={MIN_M}_MAXM={MAX_M}_Permute={PERMUTE}_VIX={VIX}/'
+res_dir = f'{DATA_DIR}Result/CONFIG={CONFIG}/FREQ={FREQ}_HALFMONEY={HALF_MONEY}_MINM={MIN_M}_MAXM={MAX_M}/'
 

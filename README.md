@@ -4,29 +4,30 @@
 
 ## Contact and citation
 
-*Authors and affiliation:*
+**Authors and affiliation:**
 
-   Weiguan Wang [w.wang34@lse.ac.uk](), https://weiguanwang.github.io/
+   Weiguan Wang [weiguanwang@outlook.com](), https://weiguanwang.github.io/, Shanghai University.
 
-   Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/
+   Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/, London School of Economics and Political Science.
 
-   Department of Mathematics, London School of Economics and Political Science, London, United Kingdom
+   22 April 2021
 
-   15 December 2020
+**Suggested citation:**
 
+   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2021. Accepted by the *Journal of Business and Economic Statistics* subject to minor corrections. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
 
+**Supplementary reading:**
 
-*Suggested citation:*
+   J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, *Journal of Computational Finance*, volume 24, number 1, pages 1-45, 2020. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363Introduction
 
-   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2020. Accepted by the Journal of Business and Economic Statistics subject to minor corrections. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
+This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2021). To run the code provided here, the user needs to:
 
-*Supplementary reading:*
-
-   J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, Journal of Computational Finance, volume 24, number 1, pages 1-45. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363
+1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
+2. Obtain raw data (should you want to work with historical datasets) and rename files as detailed in [Data folder strucuture](#Data-folder-structure).
 
 ## Introduction
 
-This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2020). To run the code provided here, the user needs to:
+This documentation explains the code structure and data folders to reproduce the results in Ruf and Wang (2021). To run the code provided here, the user needs to:
 
 1. Overwrite the `DATA_DIR` variable in the `setup.py` to your own choice.
 2. Obtain raw data (should you want to work with real datasets) and rename files as detailed in [link](#Data folder structure).
@@ -45,39 +46,37 @@ The code consists of four subfolders. They are `libaray`, `Simulation`, `OptionM
 8. `regression_aux.py`: This file contains functions that implement the linear regression methods.
 9. `simulation.py`: This file contains functions that implement the CBOE rules, and organize data.
 10. `stoxx.py`: This file contains function used to clean the Euro Stoxx 50 dataset only. 
-11. `vix.py`: This file contains the function that simulates an Ornstein-Uhlenbeck  process, used as the fake VIX feature.
 
 
 
 In each of the other three folder, there are two python files that are used by other notebooks:
 
-1. `Setup.py`: This file contains all the flags to configure experiments. It varies by datasets, and contains two major configurations:
+1. `setup.py`: This file contains all the flags to configure experiments. It varies by datasets, and contains two major configurations:
    1. It specifies the hedging period, time window size, data cleaning choice, and other experimental setup.
    2. It specifies the location of raw data, clean data, and the stored results.
 2.  `Load_Clean_aux.py` loads the clean data and implements some extra cleaning, before running linear regressions or ANNs.
 
 The notebooks have a very similar structure as follows:
 
-1. In the simulation folder, the first notebook implements the data simulation. In the OptionMetrics and Euroxx folder, the first notebook implements the cleaning of the real raw datasets downloaded from data providers. 
+1. In the simulation folder, the first notebook implements the data simulation. In the OptionMetrics and Euroxx folder, the first notebook implements the cleaning of the historical raw datasets downloaded from data providers. 
 2. `2_Regression_Generate.ipynb` implements all linear regressions on sensitivities and stores the PNL (MSHE) files.
 3. `3_Tuning _Hyper.ipynb` implements the tuning of $L^2 $ regularisation parameters. 
 4. `4_Network.ipynb` implements the training of the ANN and stores the PNL files (MSHE of ANN).
 6. `5_Diagnostic.ipynb` creates tables to summarize PNL (MSHE) files in terms of given performance measure, across several experimental setups, i.e. globally for each dataset.
 7. `6_Local_Diag_And_Plots.ipynb` implements the diagnostics of PNL files for a single experimental setup. Plots made from PNL files are generated in this file. They include linear regression coefficients, mean squared hedging error plots, MSHE vs sensitivities, confidence interval and etc.
 8. `7_Analysis_of_(Semi-)CleanData.ipynb` implements the analysis of raw and clean data. They include histograms of certain features, number of samples in each time window, volatility, leverage effect, etc.
-9. `8_Permute_VIX_Analysis.ipynb` implements the analysis of permutation and fake VIX experiments. The implementation of the experiment is done in notebook 4 and 5, by giving the corresponding setup flags. This notebook only exists for the Simulation and OptionMetrics folders.
-9. `9_Bucket_Moneyness.ipynb` splits the data set by moneyness into several buckets, and runs statistical models on each bucket independently. 
+9.  `8_Bucket_Moneyness.ipynb` splits the data set by moneyness into several buckets, and runs statistical models on each bucket independently. 
 
 ## Data folder structure
 
-Before running the code, one needs to specify the directory that stores the simulation data, (or real data) and the results. This is done by overwriting the `DATA_DIR` variable in each of the `setup.py` file. 
+Before running the code, one needs to specify the directory that stores the simulation data, (or historical data) and the results. This is done by overwriting the `DATA_DIR` variable in each of the `setup.py` file. 
 
 The data folders  have two common subfolders,
 
-1. `CleanData`: It stores simulation data in case of Black-Scholes or Heston data, or clean data generated by `1_Clean.ipynb` in case of real data.
+1. `CleanData`: It stores simulated data in case of Black-Scholes or Heston data, or cleaned data generated by `1_Clean.ipynb` in case of historical data.
 2. `Result`: It store the PNL files and other auxiliary files, either from the linear regressions or ANN. They also include  tables made by `5_Diagnostic.ipynb`. For the ANN, it additionally contains loss plots, checkpoints, etc. For the linear regression, it additionally contains regression coefficients, standard errors, etc.
 
-For the two real datasets, there is an extra folder `RawData` to store data given by data providers. Data needs to be arranged and renamed in the following way for the code to run.
+For the two historical datasets, there is an extra folder `RawData` to store data given by data providers. Data needs to be arranged and renamed in the following way for the code to run.
 
 - For the S\&P 500 data. There are 4 files:
 
@@ -96,6 +95,14 @@ For the two real datasets, there is an extra folder `RawData` to store data give
   3. `interest_rate` contains seven files. They are `LIBOR_EURO_ON`, `LIBOR_EURO_1M.csv`,  `LIBOR_EURO_3M.csv`, `LIBOR_EURO_6M.csv` `LIBOR_EURO_12M.csv`; namely, LIBOR rate of overnight, maturity 1 month, 3 months, 6 months, 12 months. The other two files are `ZERO_EURO_5Y` and `ZERO_EURO_10Y`; namely, interest rate derived from zero-coupon bond of maturity 5  and 10 years.
   4. `stoxx50.csv` is the end-of-day spot of Euro Stoxx 50 index.
   
+
+
+
+## Known issues
+
+We used business day convention when counting and offsetting days, where business days consist of all weekdays. However, the stock/option trading days are a subset of  business days due to the existence of certain public holidays. For instance, Martin Luther King Day is not a trading day on the Chicago Board Option Exchange, where the S\&P 500 options are traded.  The current code does not take this difference into account, and hence unnecessarily removes samples when it cannot obtain the stock/option price at the end of a hedging period. This problem has no significant impact for the results and conclusions presented here as it only reduces the sample size, and only by a miniscule amount.
+
+We thank Max Yang for reporting this issue to us.
 
 
 
