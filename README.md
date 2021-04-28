@@ -6,11 +6,11 @@
 
 **Authors and affiliation:**
 
-   Weiguan Wang [weiguanwang@outlook.com](), https://weiguanwang.github.io/, Shanghai University.
+Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/, London School of Economics and Political Science.
 
-   Prof. Johannes Ruf [j.ruf@lse.ac.uk](), http://www.maths.lse.ac.uk/Personal/jruf/, London School of Economics and Political Science.
+Weiguan Wang [weiguanwang@outlook.com](), https://weiguanwang.github.io/, Shanghai University.  
 
-   22 April 2021
+22 April 2021
 
 **Suggested citation:**
 
@@ -19,6 +19,8 @@
 **Supplementary reading:**
 
    J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, *Journal of Computational Finance*, volume 24, number 1, pages 1-45, 2020. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363Introduction
+
+J. Ruf and W. Wang, Information Leakage in Backtesting, working paper.
 
 ## Introduction
 
@@ -89,7 +91,6 @@ For the two historical datasets, there is an extra folder `RawData` to store dat
   2. `options` contains two files, `options.csv` and `refData.csv`; they are tick trading data of options and their reference.
   3. `interest_rate` contains seven files. They are `LIBOR_EURO_ON`, `LIBOR_EURO_1M.csv`,  `LIBOR_EURO_3M.csv`, `LIBOR_EURO_6M.csv` `LIBOR_EURO_12M.csv`; namely, LIBOR rate of overnight, maturity 1 month, 3 months, 6 months, 12 months. The other two files are `ZERO_EURO_5Y` and `ZERO_EURO_10Y`; namely, interest rate derived from zero-coupon bond of maturity 5  and 10 years.
   4. `stoxx50.csv` is the end-of-day spot of Euro Stoxx 50 index.
-  
 
 
 
@@ -97,7 +98,7 @@ For the two historical datasets, there is an extra folder `RawData` to store dat
 
 We used business day convention when counting and offsetting days, where business days consist of all weekdays. However, the stock/option trading days are a subset of  business days due to the existence of certain public holidays. For instance, Martin Luther King Day is not a trading day on the Chicago Board Option Exchange, where the S\&P 500 options are traded.  The current code does not take this difference into account, and hence unnecessarily removes samples when it cannot obtain the stock/option price at the end of a hedging period. This problem has no significant impact for the results and conclusions presented here as it only reduces the sample size, and only by a miniscule amount.
 
-We thank Max Yang for reporting this issue to us.
+We thank Yiren Wu and Max Yang for reporting this issue to us.
 
 
 
