@@ -96,11 +96,11 @@ For the two historical datasets, there is an extra folder `RawData` to store dat
 
 ## Known issues
 
-We used business day convention when counting and offsetting days, where business days consist of all weekdays. However, the stock/option trading days are a subset of  business days due to the existence of certain public holidays. For instance, Martin Luther King Day is not a trading day on the Chicago Board Option Exchange, where the S\&P 500 options are traded.  The current code does not take this difference into account, and hence unnecessarily removes samples when it cannot obtain the stock/option price at the end of a hedging period. This problem has no significant impact for the results and conclusions presented here as it only reduces the sample size, and only by a miniscule amount.
+1. We use business day convention when counting and offsetting days, where business days consist of all weekdays. However, the stock/option trading days are a subset of  business days due to the existence of certain public holidays. For instance, Martin Luther King Day is not a trading day on the Chicago Board Option Exchange, where the S\&P 500 options are traded.  The current code does not take this difference into account, and hence unnecessarily removes samples when it cannot obtain the stock/option price at the end of a hedging period. This problem has no significant impact for the results and conclusions presented here as it only reduces the sample size, and only by a miniscule amount.
 
-We thank Yiren Wu and Max Yang for reporting this issue to us.
+2. The code uses continuous compounding for computing the single-period return on the risk-free asset. However, Equation (1) in the paper uses simple compounding. This is slightly inconsistent but does not seem to change the results in any significant way. 
 
-
+We thank Yiren Wu and Max Yang for reporting these two issues.
 
 ## Package information
 
