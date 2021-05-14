@@ -15,8 +15,8 @@ if getpass.getuser() in ['rufj']:
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
-UNDERLYING_MODEL = 'Heston'
-CONFIG = '6'
+UNDERLYING_MODEL = 'BS'
+CONFIG = '1'
 
 """
 Simulation setup.
