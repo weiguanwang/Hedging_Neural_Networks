@@ -14,13 +14,13 @@ Weiguan Wang [weiguanwang@outlook.com](), https://weiguanwang.github.io/, Shangh
 
 **Suggested citation:**
 
-   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2021. Accepted by the *Journal of Business and Economic Statistics* subject to minor corrections. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
+   J. Ruf and W. Wang, Hedging with Linear Regressions and Neural Networks, SSRN 3580132, 2021. Forthcoming in the *Journal of Business and Economic Statistics*. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3580132
 
 **Supplementary reading:**
 
    J. Ruf and W. Wang, Neural Networks for Option Pricing and Hedging: A Literature Review, *Journal of Computational Finance*, volume 24, number 1, pages 1-45, 2020. Download at  https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3486363Introduction
 
-J. Ruf and W. Wang, Information Leakage in Backtesting, working paper.
+J. Ruf and W. Wang (2021b), Information Leakage in Backtesting. SSRN 3836631. Download at https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3836631
 
 ## Introduction
 
